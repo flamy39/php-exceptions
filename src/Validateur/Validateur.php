@@ -1,14 +1,26 @@
 <?php
 
-namespace App;
+namespace App\Validateur;
 
+use App\Exceptions\NombreException;
 use App\Exceptions\PasswordException;
 
 class Validateur
 {
+    /**
+     * @throws NombreException
+     */
+    public function verifieNombre(int $nombre): bool
+    {
+        if ($nombre < 0) {
+            throw new NombreException('Le nombre doit être positif.');
+        }
+        return true;
+    }
+
     public function checkNumber(int $number): bool
     {
-        // test si le nombre est un entier
+
         if ($number < 0) {
             throw new \InvalidArgumentException('Le nombre doit être positif.');
         }
@@ -25,7 +37,7 @@ class Validateur
 
     // Méthode permettant de vérifier la validité d'un mot de passe
     // Un mot de passe est valide s'il possède au moins 8 caractères, une majuscule, une minuscule et un chiffre
-    public function checkPassword2(string $password): bool
+    public function verifierMotPasse(string $password): bool
     {
         // Vérifie si la longueur du mot de passe est inférieur à 8
         if (strlen($password) < 8) {

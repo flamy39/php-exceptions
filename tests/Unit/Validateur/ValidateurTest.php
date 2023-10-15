@@ -1,18 +1,19 @@
 <?php
 
-namespace AppTests\Unit;
+namespace Tests\Unit\Validateur;
 
+use App\Exceptions\NombreException;
 use App\Exceptions\PasswordException;
-use App\Validateur;
-use PHPUnit\Event\Test\Passed;
+use App\Validateur\Validateur;
 use PHPUnit\Framework\Attributes\Test;
+use PHPUnit\Framework\TestCase;
 
-class ValidateurTest extends \PHPUnit\Framework\TestCase {
+class ValidateurTest extends TestCase {
 
     #[test]
     public function CheckNumber_PositiveNumber_True() {
         $validateur = new Validateur();
-        $resultat = $validateur->checkNumber(1);
+        $resultat = $validateur->verifieNombre(1);
         $this->assertTrue($resultat);
     }
 //    #[test]
@@ -22,11 +23,11 @@ class ValidateurTest extends \PHPUnit\Framework\TestCase {
 //        $this->assertFalse($resultat);
 //    }
     #[test]
-    public function CheckNumber_NegativeNumber_InvalidArgumentException() {
+    public function CheckNumber_NegativeNumber_NombreException() {
         $validateur = new Validateur();
-        $this->expectException(\InvalidArgumentException::class);
+        $this->expectException(NombreException::class);
         $this->expectExceptionMessage('Le nombre doit être positif.');
-        $resultat = $validateur->checkNumber(-2);
+        $resultat = $validateur->verifieNombre(-2);
     }
 
     #[test]
@@ -41,7 +42,7 @@ class ValidateurTest extends \PHPUnit\Framework\TestCase {
         $validateur = new Validateur();
         $this->expectException(PasswordException::class);
         $this->expectExceptionMessage('Le mot de passe doit contenir au moins une majuscule.');
-        $resultat = $validateur->checkPassword2("passepasse");
+        $resultat = $validateur->verifierMotPasse("passepasse");
     }
 
     #[test]
@@ -49,19 +50,19 @@ class ValidateurTest extends \PHPUnit\Framework\TestCase {
         $validateur = new Validateur();
         $this->expectException(PasswordException::class);
         $this->expectExceptionMessage('Le mot de passe doit contenir au moins une minuscule.');
-        $resultat = $validateur->checkPassword2("PPAPAPAPAKJS");
+        $resultat = $validateur->verifierMotPasse("PPAPAPAPAKJS");
     }
     #[test]
     public function CheckPassword_NoDigit__PasswordException() {
         $validateur = new Validateur();
         $this->expectException(PasswordException::class);
         $this->expectExceptionMessage('Le mot de passe doit contenir au moins un chiffre.');
-        $resultat = $validateur->checkPassword2("PoajkjkkjzajP");
+        $resultat = $validateur->verifierMotPasse("PoajkjkkjzajP");
     }
     #[test]
     public function CheckPassword_CorrectPassword__True() {
         $validateur = new Validateur();
-        $resultat = $validateur->checkPassword2("Passepasse1");
+        $resultat = $validateur->verifierMotPasse("Passepasse1");
         $this->assertTrue($resultat);
     }
 
